@@ -1,0 +1,128 @@
+
+public class sheet {
+
+	public static void main(String[] args) {
+
+ String[] photo = {
+	                "33JUBU33",
+	                "3U3O4433",
+	                "O33P44NB",
+	                "PO3NSDP3",
+	                "VNDSD333",
+	                "OINFD33X"
+	        };
+	        findplayer(photo,3,16);
+
+	    }
+
+	
+
+
+
+public static int[] Right(String[] p, int c, int i, int j,String s,int[] b) {
+    if (j==p[i].length() || p[i].charAt(j) != s.charAt(0))
+        return b;
+    else {
+        b[0] = c;
+        b[1] = i;
+        b[2] = j - 1;
+        c++;
+        if (i-1 > 0){
+            Up(p, c, i, j + 1, s,b);
+        }
+        if (i+1 < p.length){
+            Down(p, c, i, j + 1, s,b);
+        }
+        return Right(p, c, i, j + 1, s,b);
+    }
+}
+
+public static int[] Down(String[] p, int c, int i, int j,String s, int[] b) {
+    if (p[i].charAt(j) != s.charAt(0) || i>=p.length)
+        return b;
+    else {
+        b[0] = c;
+        b[1] = i - 1;
+        b[2] = j;
+        c++;
+        if (j+1<p[i].length()){
+            Right(p, c, i + 1, j, s,b);
+        }
+        if (j-1>0){
+            Left(p, c, i + 1, j, s,b);
+        }
+        return Down(p, c, i + 1, j, s,b);
+    }
+}
+
+public static int[] Up(String[] p, int c, int i, int j,String s, int[] b) {
+    if (i<0 || p[i].charAt(j) != s.charAt(0))
+        return b;
+    else {
+        b[0] = c;
+        b[1] = i + 1;
+        b[2] = j;
+        c++;
+        if (j+1<p[i].length()) {
+            Right(p, c, i - 1, j, s, b);
+        }
+        if (j-1>0) {
+            Left(p, c, i - 1, j, s, b);
+        }
+        return Up(p, c, i - 1, j, s,b);
+    }
+}
+
+public static int[] Left(String[] p, int c, int i, int j, String s,int[] b) {
+    if (j < 0  || p[i].charAt(j) != s.charAt(0) || j==0)
+        return b;
+    else {
+        b[0] = c;
+        b[1] = i;
+        b[2] = j + 1;
+        c++;
+        if (i-1 > 0) {
+            Up(p, c, i, j - 1, s, b);
+        }
+        if (i+1 < p.length) {
+            Down(p, c, i, j - 1, s, b);
+        }
+        return Left(p, c, i, j - 1, s,b);
+    }
+}
+public static void findplayer(String[] photo, int m, int threshold) {
+    String t = Integer.toString(m);
+    int c = 0;
+    int[] a1 = new int[3];
+    int[] a2 = new int[3];
+    int[] a3 = new int[3];
+    int[] a4 = new int[3];
+    int[][] corner = new int[50][2];
+    int ct = 0;
+   
+    for (int i = 0; i < photo.length; i++) {
+        for (int j = 0; j < photo[i].length(); j++) {
+            a1 = Down(photo, c, i, j, t,a1);
+            a2 = Up(photo, c, i, j, t,a2);
+            a3 = Left(photo, c, i, j, t,a3);
+            a4 = Right(photo, c, i, j, t,a4);
+            c = a1[0] + a2[0] + a3[0] + a4[0];
+            int area=c*4;
+            if (area == threshold || area > threshold) {
+                for(int z=0;z<3;z++) {
+                    System.out.println(a2[z]);
+                }
+                corner[ct][0] = (a1[1] + a2[1] + 1) / 2;
+                corner[ct][1] = (a3[2] + a4[2] + 1) / 2;
+                ct++;
+            }
+        }
+    }
+    for (int i = 0; i < 50; i++) {
+        for (int j = 0; j < 2; j++) {
+            System.out.printf("%d", corner[i][j]);
+        }
+        System.out.println();
+    }
+}
+}
